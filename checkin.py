@@ -320,10 +320,10 @@ def format_check_in_notification(detail: dict) -> str:
 	lines = [
 		f'[CHECK-IN] {detail["name"]}',
 		'  ━━━━━━━━━━━━━━━━━━━━',
-		'  签到前',
-		f'     余额: ${detail["before_quota"]:.2f}  |  累计消耗: ${detail["before_used"]:.2f}',
-		'  签到后',
-		f'     余额: ${detail["after_quota"]:.2f}  |  累计消耗: ${detail["after_used"]:.2f}',
+		'  📍 签到前',
+		f'     💵 余额: ${detail["before_quota"]:.2f}  |  📊 累计消耗: ${detail["before_used"]:.2f}',
+		'  📍 签到后',
+		f'     💵 余额: ${detail["after_quota"]:.2f}  |  📊 累计消耗: ${detail["after_used"]:.2f}',
 	]
 
 	has_reward = detail['check_in_reward'] != 0
@@ -333,19 +333,20 @@ def format_check_in_notification(detail: dict) -> str:
 		lines.append('  ━━━━━━━━━━━━━━━━━━━━')
 
 		if not has_reward and has_usage:
-			lines.append('  今日已签到（期间有使用）')
+			lines.append('  ℹ️  今日已签到（期间有使用）')
 
 		if has_reward:
-			lines.append(f'  签到获得: +${detail["check_in_reward"]:.2f}')
+			lines.append(f'  🎁 签到获得: +${detail["check_in_reward"]:.2f}')
 
 		if has_usage:
-			lines.append(f'  期间消耗: ${detail["usage_increase"]:.2f}')
+			lines.append(f'  📉 期间消耗: ${detail["usage_increase"]:.2f}')
 
 		if detail['balance_change'] != 0:
 			change_symbol = '+' if detail['balance_change'] > 0 else ''
-			lines.append(f'  余额变化: {change_symbol}${detail["balance_change"]:.2f}')
+			change_emoji = '📈' if detail['balance_change'] > 0 else '📉'
+			lines.append(f'  {change_emoji} 余额变化: {change_symbol}${detail["balance_change"]:.2f}')
 	else:
-		lines.extend(['  ━━━━━━━━━━━━━━━━━━━━', '  今日已签到，无变化'])
+		lines.extend(['  ━━━━━━━━━━━━━━━━━━━━', '  ℹ️  今日已签到，无变化'])
 
 	return '\n'.join(lines)
 
