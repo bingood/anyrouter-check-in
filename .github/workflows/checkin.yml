@@ -49,6 +49,18 @@ jobs:
         sudo apt-get install -y xvfb fonts-noto-color-emoji fonts-freefont-ttf fonts-unifont \
           fonts-ipafont-gothic fonts-wqy-zenhei fonts-tlwg-loma-otf
 
+    - name: 配置 AnyRouter 域名解析
+      run: |
+        set -euo pipefail
+        {
+          echo "47.246.23.192 anyrouter.top"
+          echo "47.246.23.200 anyrouter.top"
+        } | sudo tee -a /etc/hosts >/dev/null
+
+        echo "✅ anyrouter.top 已绑定到固定 IP"
+        getent hosts anyrouter.top
+        curl -fsSI --connect-timeout 10 --max-time 20 https://anyrouter.top/login | head -n 1
+
     - name: 缓存 CloakBrowser 二进制
       uses: actions/cache@v5
       id: cloakbrowser-cache
